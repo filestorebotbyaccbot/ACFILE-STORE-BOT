@@ -98,6 +98,22 @@ async def cb_handler(client: Bot, query: CallbackQuery):
             )
         )
 
+    elif data.startswith("delete_file_"):
+        file_id = data.split("_")[2]
+        file_data = await db.database['files'].find_one({"file_id": file_id})
+        
+        if file_data:
+            msg_id = file_data.get("msg_id")
+            try:
+                await client.delete_messages(chat_id=client.db_channel.id, message_ids=msg_id)
+            except: pass
+            await db.database['files'].delete_one({"file_id": file_id})
+            await query.answer("✅ Deleted from Database & Channel!", show_alert=True)
+            await query.message.delete()
+        else:
+            await query.answer("❌ File Not Found!", show_alert=True)
+            
+
 
 
     elif data == "close":
