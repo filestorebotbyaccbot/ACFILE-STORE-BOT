@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from database.database import db # Aapka database variable
 from config import *
 
-@bot.on_message(filters.text & filters.group)
+@Bot.on_message(filters.text & filters.group)
 async def story_finder_logic(client, message):
     # Jo user ne text bheja hai
     query = message.text.strip()
