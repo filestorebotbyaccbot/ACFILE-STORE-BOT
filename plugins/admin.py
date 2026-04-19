@@ -1,7 +1,6 @@
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from bot import Bot
 from config import *
 from database.database import db 
 
@@ -76,3 +75,40 @@ async def get_admins(client: Client, message: Message):
 
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]])
     await pro.edit(f"<b>⚡ Current Admin List:</b>\n\n{admin_list}", reply_markup=reply_markup)
+
+# --- COMMAND TO ADD STORY LINK ---
+@Bot.on_message(filters.command('add') & filters.private & admin)
+async def add_story_cmd(client: Client, message: Message):
+    pro = await message.reply("<b><i>⌛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
+    
+    # Command split: /add keyword link
+    args = message.text.split()
+    
+    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]])
+
+    if len(args) < 3:
+        return await pro.edit(
+            "<b>❌ Gᴀʟᴀᴛ Tᴀʀɪᴋᴀ!</b>\n\n"
+            "<b>Usage:</b> <code>/add [keyword] [link]</code>\n"
+            "<b>Example:</b> <code>/add bairiya https://t.me/c/123/45</code>",
+            reply_markup=reply_markup
+        )
+
+    keyword = args[1].lower()
+    link = args[2]
+
+    try:
+        # Database mein save karna
+        await db.add_story(keyword, link)
+        
+        await pro.edit(
+            f"<b>⚡ Story Added Successfully!</b>\n\n"
+            f"<b><blockquote>📝 Keyword: <code>{keyword}</code></blockquote></b>\n"
+            f"<b><blockquote>🔗 Link: {link}</blockquote></b>\n\n"
+            f"<i>Ab group mein koi bhi <code>{keyword}</code> likhega toh bot use redirect button de dega.</i>",
+            reply_markup=reply_markup,
+            disable_web_page_preview=True
+        )
+    except Exception as e:
+        await pro.edit(f"<b>⚠️ Error while saving:</b>\n<code>{e}</code>", reply_markup=reply_markup)
+            
