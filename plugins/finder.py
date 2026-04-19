@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from bot import Bot  # Agar aapka bot instance 'Bot' naam se hai
+# Agar aapka bot instance 'Bot' naam se hai
 from database.database import db 
 
 @Bot.on_message(filters.text & filters.group)
