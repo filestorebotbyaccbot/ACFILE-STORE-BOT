@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 # Agar aapka bot instance 'Bot' naam se hai
 from database.database import db 
 
-@Bot.on_message(filters.text & filters.group)
+@Client.on_message(filters.text & filters.group)
 async def story_finder(client, message):
     # 1. User ka message uthao aur clean karo
     query = message.text.strip().lower()
