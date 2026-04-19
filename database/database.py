@@ -261,5 +261,24 @@ class Rohit:
         result = await self.sex_data.aggregate(pipeline).to_list(length=1)
         return result[0]["total"] if result else 0
 
+    
+        # --- Yahan se Copy karein ---
+    async def get_search_results(self, query):
+        """
+        Audio stories dhoondhne ke liye function.
+        """
+        # CodeFlix bots mein files 'files' collection mein hoti hain
+        files_data = self.database['files']
+        
+        # Regex search (Case-insensitive)
+        # file_name field ko check karega
+        filter = {'file_name': {'$regex': query, '$options': 'i'}}
+        
+        # Top 10 results fetch karna
+        cursor = files_data.find(filter)
+        results = await cursor.to_list(length=10)
+        return results
+    # --- Yahan tak ---
 
+# Ye line aapki file mein pehle se hogi, iske upar hi upar wala code rahega
 db = Rohit(DB_URI, DB_NAME)
