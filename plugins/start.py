@@ -479,4 +479,55 @@ async def bcmd(bot: Bot, message: Message):
     await message.reply(text=CMD_TXT, reply_markup = reply_markup, quote= True)
 
 
+# --- SILENT AUDIO STORY FINDER LOGIC ---
+
+@Bot.on_message(filters.text & filters.group)
+async def group_audio_finder(client: Client, message: Message):
+    # 1. Jo user ne dhoondhne ke liye likha
+    query = message.text.strip()
+
+    # 2. Agar message bahut chhota hai toh ignore karo
+    if len(query) < 3:
+        return
+
+    # 3. Database se results check karo
+    # (Dhyan rahe: database.py mein get_search_results function add hona zaroori hai)
+    try:
+        results = await db.get_search_results(query)
+    except Exception as e:
+        print(f"Search Error: {e}")
+        return
+
+    # 4. SILENT CONDITION: Agar file mili tabhi reply jayega
+    if results:
+        buttons = []
+        for file in results:
+            f_name = file.get("file_name")
+            # File Store bot mein ham 'file_id' use karte hain start link ke liye
+            f_id = file.get("file_id") 
+
+            if not f_id:
+                continue
+
+            # Button jo bot ke private message (PM) mein le jayega
+            buttons.append([
+                InlineKeyboardButton(
+                    text=f"🎧 {f_name}", 
+                    url=f"https://t.me/{client.username}?start={f_id}"
+                )
+            ])
+        
+        # Result milne par reply bhej dena
+        if buttons:
+            await message.reply_text(
+                text=f"<b>Aapki Audio Story mil gayi hai:</b>\n\n🔍 Search: <code>{query}</code>",
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.HTML
+            )
+    
+    # Agar kuch nahi mila, toh bot khamosh rahega
+    return
+    
+
+
 
