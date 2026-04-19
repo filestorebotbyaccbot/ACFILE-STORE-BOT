@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from database.database import db 
 
-@Client.on_message(filters.text & filters.group)
+@Bot.on_message(filters.text & filters.group)
 async def story_finder(client, message):
     query = message.text.strip().lower()
     if len(query) < 3: return # Chote words ignore karein
