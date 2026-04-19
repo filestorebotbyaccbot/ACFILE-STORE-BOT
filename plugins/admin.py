@@ -5,7 +5,7 @@ from config import *
 from database.database import db 
 
 # --- COMMAND TO ADD ADMINS ---
-@Bot.on_message(filters.command('add_admin') & filters.private & filters.user(OWNER_ID))
+@Client.on_message(filters.command('add_admin') & filters.private & filters.user(OWNER_ID))
 async def add_admins(client: Client, message: Message):
     pro = await message.reply("<b><i>⌛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     admin_ids = await db.get_all_admins()
@@ -37,7 +37,7 @@ async def add_admins(client: Client, message: Message):
     await pro.edit(f"<b>⚡ Admin Management Result:</b>\n\n{admin_list}", reply_markup=reply_markup)
 
 # --- COMMAND TO DELETE ADMINS ---
-@Bot.on_message(filters.command('deladmin') & filters.private & filters.user(OWNER_ID))
+@Client.on_message(filters.command('deladmin') & filters.private & filters.user(OWNER_ID))
 async def delete_admins(client: Client, message: Message):
     pro = await message.reply("<b><i>⌛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     admin_ids = await db.get_all_admins()
@@ -63,7 +63,7 @@ async def delete_admins(client: Client, message: Message):
     await pro.edit(f"<b>⛔ Admin Removal Result:</b>\n\n{passed}", reply_markup=reply_markup)
 
 # --- COMMAND TO LIST ADMINS ---
-@Bot.on_message(filters.command('admins') & filters.private & admin)
+@Client.on_message(filters.command('admins') & filters.private & admin)
 async def get_admins(client: Client, message: Message):
     pro = await message.reply("<b><i>⌛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     admin_ids = await db.get_all_admins()
@@ -77,7 +77,7 @@ async def get_admins(client: Client, message: Message):
     await pro.edit(f"<b>⚡ Current Admin List:</b>\n\n{admin_list}", reply_markup=reply_markup)
 
 # --- COMMAND TO ADD STORY LINK ---
-@Bot.on_message(filters.command('add') & filters.private & admin)
+@Client.on_message(filters.command('add') & filters.private & admin)
 async def add_story_cmd(client: Client, message: Message):
     pro = await message.reply("<b><i>⌛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..</i></b>", quote=True)
     
